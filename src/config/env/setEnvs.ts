@@ -1,4 +1,4 @@
-import { load } from "../../../deps/index.ts";
+import { load } from "../../../deps/deps.ts";
 
 export default async function setEnvs() {
   const env = await load();

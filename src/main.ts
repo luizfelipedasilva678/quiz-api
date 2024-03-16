@@ -1,19 +1,11 @@
-import setEnvs from "./infra/env/setEnvs.ts";
-
-async function getClient() {
-  const client = (await import("./infra/db/index.ts")).default;
-  return client;
-}
+import setEnvs from "./config/env/setEnvs.ts";
+import Database from "./config/db/database.ts";
 
 async function start() {
   await setEnvs();
-  const client = await getClient();
-  await client.connect();
+  const client = await Database.getClient();
+
+  console.log("Connected to the database? ", client.connected);
 }
 
-try {
-  await start();
-} catch {
-  const client = await getClient();
-  client.end();
-}
+start();
