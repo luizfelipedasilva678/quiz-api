@@ -3,7 +3,7 @@ CREATE TABLE QUIZ (
     name TEXT NOT NULL,
     subject TEXT NOT NULL,
     image_id TEXT DEFAULT NULL,
-    expiration_date TIMESTAMP NOT NULL,
+    expiration_date TIMESTAMP NOT NULL
 );
 
 CREATE TABLE OPTION (
