@@ -1,0 +1,33 @@
+CREATE TABLE Image (
+    id BIGSERIAL PRIMARY KEY,
+    url TEXT NOT NULL
+);
+
+CREATE TABLE Quiz (
+    id BIGSERIAL PRIMARY KEY,
+    name TEXT NOT NULL,
+    image_id INTEGER DEFAULT NULL,
+    CONSTRAINT fk_quiz_image_id
+    FOREIGN KEY (image_id) REFERENCES Image(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE Option (
+    id BIGSERIAL PRIMARY KEY,
+    description TEXT NOT NULL,
+    is_correct BOOLEAN NOT NULL
+);
+
+CREATE TABLE QUESTION (
+    id BIGSERIAL PRIMARY KEY,
+    title VARCHAR(30) NOT NULL,
+    quiz_id INTEGER NOT NULL,
+    image_id INTEGER DEFAULT NULL,
+    option_id INTEGER NOT NULL,
+    CONSTRAINT fk_question_quiz_id
+    FOREIGN KEY (quiz_id) REFERENCES Quiz(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_question_image_id
+    FOREIGN KEY (image_id) REFERENCES Image(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_question_option_id
+    FOREIGN KEY (option_id) REFERENCES Option(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
