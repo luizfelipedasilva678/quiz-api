@@ -1,0 +1,10 @@
+{
+  "tasks": {
+    "dev": "deno run --watch main.ts",
+    "check": "deno fmt --check && deno lint",
+    "install-hooks": "deno run -A -r https://deno.land/x/githooks/githooks.ts"
+  },
+  "githooks": {
+    "pre-commit": "check"
+  }
+}
