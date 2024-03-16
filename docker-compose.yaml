@@ -1,0 +1,21 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres:16.2-alpine3.19
+    restart: always
+    shm_size: 128mb
+    environment:
+      POSTGRES_PASSWORD_FILE: /run/secrets/db_password
+      POSTGRES_USER_FILE: /run/secrets/db_user
+    ports:
+      - "5432:5432"
+    secrets:
+      - db_password
+      - db_user
+  
+secrets:
+  db_password:
+    file: ./secrets/postgres_password.txt
+  db_user:
+    file: ./secrets/postgres_user.txt
