@@ -8,16 +8,7 @@ async function start() {
   const imageRepository = new ImageRepository(client);
 
   console.log("Connected to the database? ", client.connected);
-  const image = await imageRepository.getImage(21);
-
-  console.log(
-    await imageRepository.saveImage({
-      url: "https://www.google.com",
-      id: -1,
-    }),
-  );
-
-  console.log(image?.id);
+  console.log(imageRepository);
 }
 
 start();
