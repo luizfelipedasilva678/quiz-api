@@ -1,13 +1,13 @@
 import { Client, Hono } from "../../deps/deps.ts";
-import quizRouter from "./quizzes/quizzes.router.ts";
-import questionRouter from "./questions/questions.router.ts";
+import quizRoute from "./quizzes/quizzes.route.ts";
+import questionRoute from "./questions/questions.route.ts";
 
 export default function app(client: Client) {
   const app = new Hono();
   const baseUrl = Deno.env.get("BASE_URL");
 
-  app.route("/quizzes", quizRouter(client));
-  app.route("/questions", questionRouter(client));
+  app.route("/quizzes", quizRoute(client));
+  app.route("/questions", questionRoute(client));
 
   app.get("/", (c) => {
     return c.json({

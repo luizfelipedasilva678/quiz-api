@@ -1,15 +1,15 @@
 import { Client, Hono, HTTPException, validator } from "../../../deps/deps.ts";
-import QuestionRDBRepository from "../../repositories/question-rdb.repository.ts";
-import QuestionController from "./questions.controller.ts";
-import QuestionService from "../../services/question.service.ts";
+import OptionRDBRepository from "../../repositories/option-rdb.repository.ts";
+import OptionService from "../../services/option.service.ts";
+import OptionController from "../../controllers/option.controller.ts";
 import mountErrorMessage from "../../utils/validation/mount-error-message.ts";
 import validateParam from "../../utils/validation/validate-param.ts";
-import { optionSchema } from "./questions.schema.ts";
+import optionSchema from "../../schemas/option.schema.ts";
 
-function questionRouter(client: Client) {
-  const repository = new QuestionRDBRepository(client);
-  const service = new QuestionService(repository);
-  const controller = new QuestionController(service);
+function questionRoute(client: Client) {
+  const optionRepository = new OptionRDBRepository(client);
+  const optionService = new OptionService(optionRepository);
+  const optionController = new OptionController(optionService);
 
   const question = new Hono();
 
@@ -38,7 +38,7 @@ function questionRouter(client: Client) {
       const { questionId } = c.req.valid("param");
       const body = c.req.valid("json");
 
-      const option = await controller.createOption({
+      const option = await optionController.create({
         description: body.description,
         is_correct: body.is_correct,
         question_id: questionId,
@@ -51,4 +51,4 @@ function questionRouter(client: Client) {
   return question;
 }
 
-export default questionRouter;
+export default questionRoute;
