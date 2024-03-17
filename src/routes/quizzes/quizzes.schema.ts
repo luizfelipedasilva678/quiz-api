@@ -3,15 +3,15 @@ import validateFileSize from "../../utils/validation/validate-file-size.ts";
 
 const schema = z.object({
   name: z.string({
-    required_error: "Name is required",
+    required_error: "name is required",
   }),
   subject: z.string({
-    required_error: "Subject is required",
+    required_error: "subject is required",
   }),
-  image: z.instanceof(File, { message: "Image is not a file" }).refine(
+  image: z.instanceof(File, { message: "image is not a file" }).refine(
     (f) => validateFileSize(f),
     {
-      message: "Image size must be less than 2MB",
+      message: "image size must be less than 2MB",
     },
   ).optional(),
 });

@@ -17,21 +17,23 @@ function quizRouter(client: Client) {
     return c.json(quizzes);
   });
 
-  quiz.get("/:id", async (c) => {
-    const { id } = c.req.param();
+  quiz.get(
+    "/:id",
+    validator("param", (param) => {
+      if (isNaN(Number(param.id))) {
+        throw new HTTPException(400, { message: "Invalid id" });
+      }
 
-    if (isNaN(Number(id))) {
-      throw new HTTPException(400, { message: "Invalid id" });
-    }
+      return { id: Number(param.id) };
+    }),
+    async (c) => {
+      const { id } = c.req.valid("param");
 
-    const quiz = await controller.getById(Number(id));
+      const quiz = await controller.getById(Number(id));
 
-    if (quiz === null) {
-      throw new HTTPException(404, { message: "Quiz not found" });
-    }
-
-    return c.json(quiz);
-  });
+      return c.json(quiz);
+    },
+  );
 
   quiz.post(
     "/",

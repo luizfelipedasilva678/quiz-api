@@ -41,6 +41,32 @@ export interface QuizRepositoryProtocol {
   delete: (id: number) => Promise<Quiz>;
   getById: (id: number) => Promise<QuizFull | null>;
   getAll: () => Promise<Quiz[]>;
+  createOption(partialOption: PartialOption): Promise<Option>;
+  createQuestion(partialQuestion: PartialQuestion): Promise<Question>;
 }
 
 export class QuizRepositoryException extends Error {}
+
+export interface Option {
+  id: number;
+  question_id: number;
+  description: string;
+  is_correct: boolean;
+}
+
+export type PartialOption = Omit<
+  Option,
+  "id" | "created_at" | "updated_at"
+>;
+
+export interface Question {
+  id: number;
+  quiz_id: number;
+  title: string;
+  image_id?: string;
+}
+
+export type PartialQuestion = Omit<
+  Question,
+  "id" | "created_at" | "updated_at"
+>;
