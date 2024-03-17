@@ -1,9 +1,10 @@
 import { Client, Hono, HTTPException, validator } from "../../../deps/deps.ts";
+import { questionSchema, quizSchema } from "./quizzes.schema.ts";
 import QuizController from "./quizzes.controller.ts";
 import QuizService from "../../services/quiz.service.ts";
 import QuizRDBRepository from "../../repositories/quiz-rdb.repository.ts";
-import quizSchema from "./quizzes.schema.ts";
 import mountErrorMessage from "../../utils/validation/mount-error-message.ts";
+import validateParam from "../../utils/validation/validate-param.ts";
 
 function quizRouter(client: Client) {
   const repository = new QuizRDBRepository(client);
@@ -18,18 +19,18 @@ function quizRouter(client: Client) {
   });
 
   quiz.get(
-    "/:id",
+    "/:quizId",
     validator("param", (param) => {
-      if (isNaN(Number(param.id))) {
+      if (!validateParam(param.quizId)) {
         throw new HTTPException(400, { message: "Invalid id" });
       }
 
-      return { id: Number(param.id) };
+      return { quizId: Number(param.quizId) };
     }),
     async (c) => {
-      const { id } = c.req.valid("param");
+      const { quizId } = c.req.valid("param");
 
-      const quiz = await controller.getById(Number(id));
+      const quiz = await controller.getById(quizId);
 
       return c.json(quiz);
     },
@@ -56,6 +57,38 @@ function quizRouter(client: Client) {
       });
 
       return c.json(quiz);
+    },
+  );
+
+  quiz.post(
+    "/:quizId/questions",
+    validator("param", (param) => {
+      if (!validateParam(param.quizId)) {
+        throw new HTTPException(400, { message: "Invalid quiz id" });
+      }
+
+      return { quizId: Number(param.quizId) };
+    }),
+    validator("form", (value) => {
+      const parsed = questionSchema.safeParse(value);
+
+      if (!parsed.success) {
+        const message = mountErrorMessage(parsed.error.errors);
+        throw new HTTPException(400, { message });
+      }
+
+      return parsed.data;
+    }),
+    async (c) => {
+      const { quizId } = c.req.valid("param");
+      const body = c.req.valid("form");
+
+      const question = await controller.createQuestion({
+        title: body.title,
+        quiz_id: quizId,
+      });
+
+      return c.json(question);
     },
   );
 

@@ -1,5 +1,5 @@
 import QuizService from "../../services/quiz.service.ts";
-import { PartialQuiz } from "../../types/quiz.types.ts";
+import { PartialQuestion, PartialQuiz } from "../../types/quiz.types.ts";
 
 export default class QuizController {
   private service: QuizService;
@@ -18,5 +18,9 @@ export default class QuizController {
 
   create(data: PartialQuiz) {
     return this.service.create(data);
+  }
+
+  createQuestion(data: PartialQuestion) {
+    return this.service.createQuestion(data);
   }
 }
