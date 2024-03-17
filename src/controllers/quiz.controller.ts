@@ -17,6 +17,6 @@ export default class QuizController {
   }
 
   create(data: PartialQuiz) {
-    return this.service.create(data);
+    return this.service.createQuiz(data);
   }
 }
