@@ -1,8 +1,8 @@
 import { Client, Hono, HTTPException, validator } from "../../../deps/deps.ts";
-import QuizController from "./quiz.controller.ts";
+import QuizController from "./quizzes.controller.ts";
 import QuizService from "../../services/quiz.service.ts";
 import QuizRDBRepository from "../../repositories/quiz-rdb.repository.ts";
-import quizSchema from "./quiz.schema.ts";
+import quizSchema from "./quizzes.schema.ts";
 import mountErrorMessage from "../../utils/validation/mount-error-message.ts";
 
 function quizRouter(client: Client) {

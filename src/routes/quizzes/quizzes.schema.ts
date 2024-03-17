@@ -8,9 +8,12 @@ const schema = z.object({
   subject: z.string({
     required_error: "Subject is required",
   }),
-  image: z.instanceof(File).refine((f) => validateFileSize(f), {
-    message: "Image size must be less than 2MB",
-  }).optional(),
+  image: z.instanceof(File, { message: "Image is not a file" }).refine(
+    (f) => validateFileSize(f),
+    {
+      message: "Image size must be less than 2MB",
+    },
+  ).optional(),
 });
 
 export default schema;

@@ -1,5 +1,5 @@
 import { Client, Hono } from "../../deps/deps.ts";
-import quizRouter from "./quiz/quiz.router.ts";
+import quizRouter from "./quizzes/quizzes.router.ts";
 
 export default function app(client: Client) {
   const app = new Hono();
