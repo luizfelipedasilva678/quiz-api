@@ -1,5 +1,5 @@
 CREATE TABLE QUIZ (
-    id BIGSERIAL PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     name TEXT NOT NULL,
     subject TEXT NOT NULL,
     image_id TEXT DEFAULT NULL,
@@ -9,10 +9,10 @@ CREATE TABLE QUIZ (
 );
 
 CREATE TABLE QUESTION (
-    id BIGSERIAL PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     title VARCHAR(30) NOT NULL,
     image_id TEXT DEFAULT NULL,
-    quiz_id BIGINT NOT NULL,
+    quiz_id INTEGER NOT NULL,
     updated_at TIMESTAMP NOT NULL,
     created_at TIMESTAMP NOT NULL,
     CONSTRAINT fk_question_quiz_id
@@ -20,10 +20,10 @@ CREATE TABLE QUESTION (
 );
 
 CREATE TABLE OPTION (
-    id BIGSERIAL PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     description TEXT NOT NULL,
     is_correct BOOLEAN NOT NULL,
-    question_id BIGINT NOT NULL,
+    question_id INTEGER NOT NULL,
     updated_at TIMESTAMP NOT NULL,
     created_at TIMESTAMP NOT NULL,
     CONSTRAINT fk_option_question_id

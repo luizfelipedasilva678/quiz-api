@@ -5,10 +5,9 @@ class Database {
 
   private constructor() {}
 
-  static async getClient() {
+  static getClient() {
     if (Database.client === null) {
       Database.client = new Client(Deno.env.get("CONN_STRING"));
-      await Database.client.connect();
     }
 
     return Database.client;
