@@ -1,16 +1,21 @@
 import {
-  PartialQuestion,
+  PartialOption,
   QuestionRepositoryProtocol,
+  QuestionServiceException,
 } from "../types/question.types.ts";
 
-export default class QuestionService {
+export default class QuizService {
   private repository: QuestionRepositoryProtocol;
 
   constructor(repository: QuestionRepositoryProtocol) {
     this.repository = repository;
   }
 
-  create(partialQuestion: PartialQuestion) {
-    return this.repository.create(partialQuestion);
+  async createOption(data: PartialOption) {
+    try {
+      return await this.repository.createOption(data);
+    } catch (e) {
+      throw new QuestionServiceException(e.message);
+    }
   }
 }

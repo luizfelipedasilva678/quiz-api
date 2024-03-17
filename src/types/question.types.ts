@@ -1,18 +1,18 @@
-export interface Question {
-  id: number;
-  quiz_id: number;
-  title: string;
-  image_id?: string;
+export interface QuestionRepositoryProtocol {
+  createOption(partialOption: PartialOption): Promise<Option>;
 }
 
-export type PartialQuestion = Omit<
-  Question,
+export class QuestionRepositoryException extends Error {}
+export class QuestionServiceException extends Error {}
+
+export interface Option {
+  id: number;
+  question_id: number;
+  description: string;
+  is_correct: boolean;
+}
+
+export type PartialOption = Omit<
+  Option,
   "id" | "created_at" | "updated_at"
 >;
-
-export interface QuestionRepositoryProtocol {
-  create: (partialQuestion: PartialQuestion) => Promise<Question>;
-}
-
-export class QuestionRepositoryException extends Error {
-}

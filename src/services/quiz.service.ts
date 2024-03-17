@@ -1,4 +1,9 @@
-import { PartialQuiz, QuizRepositoryProtocol } from "../types/quiz.types.ts";
+import {
+  PartialQuestion,
+  PartialQuiz,
+  QuizRepositoryProtocol,
+  QuizServiceException,
+} from "../types/quiz.types.ts";
 
 export default class QuizService {
   private repository: QuizRepositoryProtocol;
@@ -8,14 +13,34 @@ export default class QuizService {
   }
 
   async getAll() {
-    return await this.repository.getAll();
+    try {
+      return await this.repository.getAll();
+    } catch (e) {
+      throw new QuizServiceException(e.message);
+    }
   }
 
   async getById(id: number) {
-    return await this.repository.getById(id);
+    try {
+      return await this.repository.getById(id);
+    } catch (e) {
+      throw new QuizServiceException(e.message);
+    }
   }
 
   async create(data: PartialQuiz) {
-    return await this.repository.create(data);
+    try {
+      return await this.repository.create(data);
+    } catch (e) {
+      throw new QuizServiceException(e.message);
+    }
+  }
+
+  async createQuestion(data: PartialQuestion) {
+    try {
+      return await this.repository.createQuestion(data);
+    } catch (e) {
+      throw new QuizServiceException(e.message);
+    }
   }
 }
