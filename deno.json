@@ -1,6 +1,6 @@
 {
   "tasks": {
-    "dev": "deno run --watch -A main.ts",
+    "dev": "ENV=development deno run --watch -A src/main.ts",
     "check": "deno fmt --check && deno lint",
     "install-hooks": "deno run -A -r https://deno.land/x/githooks/githooks.ts"
   },
