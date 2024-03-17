@@ -6,6 +6,7 @@ export interface Quiz {
 }
 
 export type PartialQuiz = Omit<Quiz, "id">;
+
 export type QuizQueryResult = {
   quiz_id: number;
   quiz_image_id: string;
