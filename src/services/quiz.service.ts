@@ -1,5 +1,4 @@
 import {
-  PartialQuestion,
   PartialQuiz,
   QuizRepositoryProtocol,
   QuizServiceException,
@@ -31,14 +30,6 @@ export default class QuizService {
   async create(data: PartialQuiz) {
     try {
       return await this.repository.create(data);
-    } catch (e) {
-      throw new QuizServiceException(e.message);
-    }
-  }
-
-  async createQuestion(data: PartialQuestion) {
-    try {
-      return await this.repository.createQuestion(data);
     } catch (e) {
       throw new QuizServiceException(e.message);
     }

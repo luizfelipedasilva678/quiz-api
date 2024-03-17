@@ -1,4 +1,4 @@
-import { z } from "../../../deps/deps.ts";
+import { z } from "../../deps/deps.ts";
 
 const optionSchema = z.object({
   description: z.string({
@@ -9,4 +9,4 @@ const optionSchema = z.object({
   }),
 });
 
-export { optionSchema };
+export default optionSchema;

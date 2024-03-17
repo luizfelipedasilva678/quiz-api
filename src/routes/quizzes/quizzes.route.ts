@@ -1,20 +1,27 @@
 import { Client, Hono, HTTPException, validator } from "../../../deps/deps.ts";
-import { questionSchema, quizSchema } from "./quizzes.schema.ts";
-import QuizController from "./quizzes.controller.ts";
+import quizSchema from "../../schemas/quiz.schema.ts";
+import questionSchema from "../../schemas/question.schema.ts";
+import QuizController from "../../controllers/quiz.controller.ts";
 import QuizService from "../../services/quiz.service.ts";
 import QuizRDBRepository from "../../repositories/quiz-rdb.repository.ts";
+import QuestionRDBRepository from "../../repositories/question-rdb.repository.ts";
+import QuestionController from "../../controllers/question.controller.ts";
+import QuestionService from "../../services/question.service.ts";
 import mountErrorMessage from "../../utils/validation/mount-error-message.ts";
 import validateParam from "../../utils/validation/validate-param.ts";
 
-function quizRouter(client: Client) {
-  const repository = new QuizRDBRepository(client);
-  const service = new QuizService(repository);
-  const controller = new QuizController(service);
+function quizRoute(client: Client) {
+  const quizRepository = new QuizRDBRepository(client);
+  const quizService = new QuizService(quizRepository);
+  const quizController = new QuizController(quizService);
+  const questionsRepository = new QuestionRDBRepository(client);
+  const questionService = new QuestionService(questionsRepository);
+  const questionController = new QuestionController(questionService);
 
   const quiz = new Hono();
 
   quiz.get("/", async (c) => {
-    const quizzes = await controller.getAll();
+    const quizzes = await quizController.getAll();
     return c.json(quizzes);
   });
 
@@ -30,7 +37,7 @@ function quizRouter(client: Client) {
     async (c) => {
       const { quizId } = c.req.valid("param");
 
-      const quiz = await controller.getById(quizId);
+      const quiz = await quizController.getById(quizId);
 
       return c.json(quiz);
     },
@@ -51,7 +58,7 @@ function quizRouter(client: Client) {
     async (c) => {
       const body = c.req.valid("form");
 
-      const quiz = await controller.create({
+      const quiz = await quizController.create({
         name: body.name,
         subject: body.subject,
       });
@@ -83,7 +90,7 @@ function quizRouter(client: Client) {
       const { quizId } = c.req.valid("param");
       const body = c.req.valid("form");
 
-      const question = await controller.createQuestion({
+      const question = await questionController.create({
         title: body.title,
         quiz_id: quizId,
       });
@@ -95,4 +102,4 @@ function quizRouter(client: Client) {
   return quiz;
 }
 
-export default quizRouter;
+export default quizRoute;
