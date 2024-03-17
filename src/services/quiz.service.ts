@@ -27,7 +27,7 @@ export default class QuizService {
     }
   }
 
-  async create(data: PartialQuiz) {
+  async createQuiz(data: PartialQuiz) {
     try {
       return await this.repository.create(data);
     } catch (e) {
