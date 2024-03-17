@@ -6,6 +6,7 @@ export interface Quiz {
 }
 
 export type PartialQuiz = Omit<Quiz, "id">;
+
 export type QuizQueryResult = {
   quiz_id: number;
   quiz_image_id: string;
@@ -40,6 +41,21 @@ export interface QuizRepositoryProtocol {
   delete: (id: number) => Promise<Quiz>;
   getById: (id: number) => Promise<QuizFull | null>;
   getAll: () => Promise<Quiz[]>;
+
+  createQuestion(partialQuestion: PartialQuestion): Promise<Question>;
 }
 
 export class QuizRepositoryException extends Error {}
+export class QuizServiceException extends Error {}
+
+export interface Question {
+  id: number;
+  quiz_id: number;
+  title: string;
+  image_id?: string;
+}
+
+export type PartialQuestion = Omit<
+  Question,
+  "id" | "created_at" | "updated_at"
+>;

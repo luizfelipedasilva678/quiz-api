@@ -1,6 +1,8 @@
 import { Client } from "../../deps/deps.ts";
 import {
+  PartialQuestion,
   PartialQuiz,
+  Question,
   Quiz,
   QuizFull,
   QuizQueryResult,
@@ -50,6 +52,25 @@ export default class QuizRDBRepository implements QuizRepositoryProtocol {
     }
 
     return quiz;
+  }
+
+  async createQuestion(partialQuestion: PartialQuestion): Promise<Question> {
+    try {
+      const result = await this.client.queryObject<Question>(
+        "insert into question (quiz_id, title, image_id) values ($1, $2, $3) returning id, quiz_id, title, image_id",
+        [
+          partialQuestion.quiz_id,
+          partialQuestion.title,
+          partialQuestion.image_id,
+        ],
+      );
+
+      return result.rows.at(0)!;
+    } catch (_e) {
+      throw new QuizRepositoryException(
+        `Error creating question for quiz ${partialQuestion.quiz_id}`,
+      );
+    }
   }
 
   async getById(id: number): Promise<QuizFull | null> {
