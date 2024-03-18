@@ -1,5 +1,5 @@
 import { z } from "../../deps/deps.ts";
-import validateFileSize from "../utils/validation/validate-file-size.ts";
+import fileIsValid from "../utils/validation/file-is-valid.ts";
 
 const quizSchema = z.object({
   name: z.string({
@@ -9,9 +9,9 @@ const quizSchema = z.object({
     required_error: "subject is required",
   }),
   image: z.instanceof(File, { message: "image is not a file" }).refine(
-    (f) => validateFileSize(f),
+    (f) => fileIsValid(f),
     {
-      message: "image size must be less than 2MB",
+      message: "File is not valid",
     },
   ).optional(),
 });
