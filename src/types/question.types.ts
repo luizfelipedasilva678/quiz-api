@@ -10,6 +10,13 @@ export type PartialQuestion = Omit<
   "id" | "created_at" | "updated_at"
 >;
 
+export type CreateQuestionControllerArg =
+  & Omit<
+    Question,
+    "id" | "created_at" | "updated_at" | "image_id"
+  >
+  & { image?: File };
+
 export interface Question {
   id: number;
   quiz_id: number;

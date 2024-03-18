@@ -7,6 +7,13 @@ export interface Quiz {
 
 export type PartialQuiz = Omit<Quiz, "id">;
 
+export type CreateQuizControllerArg =
+  & Omit<
+    Quiz,
+    "id" | "created_at" | "updated_at" | "image_id"
+  >
+  & { image?: File };
+
 export type QuizQueryResult = {
   quiz_id: number;
   quiz_image_id: string;

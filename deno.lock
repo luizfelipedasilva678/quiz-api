@@ -1,6 +1,29 @@
 {
   "version": "3",
+  "packages": {
+    "specifiers": {
+      "npm:cloudinary@latest": "npm:cloudinary@2.0.3"
+    },
+    "npm": {
+      "cloudinary@2.0.3": {
+        "integrity": "sha512-2JPxAUuV4iHwiW4ATSOZvii6+BhhKI9+9KscgUkxJPKa6V6wOnZJHlYyovBGrrIbIgEdmGSZgqEsLfD0wWBhBg==",
+        "dependencies": {
+          "lodash": "lodash@4.17.21",
+          "q": "q@1.5.1"
+        }
+      },
+      "lodash@4.17.21": {
+        "integrity": "sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==",
+        "dependencies": {}
+      },
+      "q@1.5.1": {
+        "integrity": "sha512-kV/CThkXo6xyFEZUugw/+pIOywXcDbFYgSct5cT3gqlbkBE1SJdwy6UQoZvodiWF/ckQLZyDE/Bu1M6gVu5lVw==",
+        "dependencies": {}
+      }
+    }
+  },
   "redirects": {
+    "https://deno.land/std/io/buffer.ts": "https://deno.land/std@0.220.1/io/buffer.ts",
     "https://deno.land/x/hono/mod.ts": "https://deno.land/x/hono@v4.1.1/mod.ts",
     "https://deno.land/x/postgres/mod.ts": "https://deno.land/x/postgres@v0.19.3/mod.ts",
     "https://deno.land/x/zod/mod.ts": "https://deno.land/x/zod@v3.22.4/mod.ts"
@@ -140,6 +163,10 @@
     "https://deno.land/std@0.220.0/dotenv/parse.ts": "09977ff88dfd1f24f9973a338f0f91bbdb9307eb5ff6085446e7c423e4c7ba0c",
     "https://deno.land/std@0.220.0/dotenv/stringify.ts": "0047ad7068289735d08964046aea267a750c141b494ca0e38831b89be6c020c2",
     "https://deno.land/std@0.220.0/fmt/colors.ts": "d239d84620b921ea520125d778947881f62c50e78deef2657073840b8af9559a",
+    "https://deno.land/std@0.220.1/assert/assert.ts": "bec068b2fccdd434c138a555b19a2c2393b71dfaada02b7d568a01541e67cdc5",
+    "https://deno.land/std@0.220.1/assert/assertion_error.ts": "9f689a101ee586c4ce92f52fa7ddd362e86434ffdf1f848e45987dc7689976b8",
+    "https://deno.land/std@0.220.1/bytes/copy.ts": "f29c03168853720dfe82eaa57793d0b9e3543ebfe5306684182f0f1e3bfd422a",
+    "https://deno.land/std@0.220.1/io/buffer.ts": "4d1f805f350433e418002accec798bc6c33ce18f614afa65f987c202d7b2234e",
     "https://deno.land/x/hono@v4.1.1/client/client.ts": "b9d07d47a7b23f007fb2ea29a3185885e85a963a63b0f921f93ae2981ee29cda",
     "https://deno.land/x/hono@v4.1.1/client/index.ts": "30def535310a37bede261f1b23d11a9758983b8e9d60a6c56309cee5f6746ab2",
     "https://deno.land/x/hono@v4.1.1/client/utils.ts": "a93e5dc542dceb892a6b39cc793689478627ba958d251794193cf26c0ecf5800",
