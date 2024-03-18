@@ -9,14 +9,22 @@ import QuestionController from "../../controllers/question.controller.ts";
 import QuestionService from "../../services/question.service.ts";
 import mountErrorMessage from "../../utils/validation/mount-error-message.ts";
 import validateParam from "../../utils/validation/validate-param.ts";
+import CloudinaryImageUploader from "../../helpers/CloudinaryImageUploader.ts";
 
 function quizRoute(client: Client) {
+  const cloudinaryImageUploader = new CloudinaryImageUploader();
   const quizRepository = new QuizRDBRepository(client);
   const quizService = new QuizService(quizRepository);
-  const quizController = new QuizController(quizService);
   const questionsRepository = new QuestionRDBRepository(client);
   const questionService = new QuestionService(questionsRepository);
-  const questionController = new QuestionController(questionService);
+  const questionController = new QuestionController(
+    questionService,
+    cloudinaryImageUploader,
+  );
+  const quizController = new QuizController(
+    quizService,
+    cloudinaryImageUploader,
+  );
 
   const quiz = new Hono();
 
@@ -61,6 +69,7 @@ function quizRoute(client: Client) {
       const quiz = await quizController.create({
         name: body.name,
         subject: body.subject,
+        image: body.image,
       });
 
       return c.json(quiz);
@@ -93,6 +102,7 @@ function quizRoute(client: Client) {
       const question = await questionController.create({
         title: body.title,
         quiz_id: quizId,
+        image: body.image,
       });
 
       return c.json(question);

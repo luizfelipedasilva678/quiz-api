@@ -7,3 +7,4 @@ export {
   validator,
 } from "https://deno.land/x/hono/mod.ts";
 export { type ZodIssue } from "https://deno.land/x/zod@v3.22.4/ZodError.ts";
+export { Buffer } from "https://deno.land/std/io/buffer.ts";
