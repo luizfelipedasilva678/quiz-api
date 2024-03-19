@@ -1,31 +1,15 @@
-import { Client, Hono, HTTPException, validator } from "../../../deps/deps.ts";
+import { Hono, HTTPException, validator } from "../../../deps/deps.ts";
 import quizSchema from "../../schemas/quiz.schema.ts";
 import questionSchema from "../../schemas/question.schema.ts";
 import QuizController from "../../controllers/quiz.controller.ts";
-import QuizService from "../../services/quiz.service.ts";
-import QuizRDBRepository from "../../repositories/quiz-rdb.repository.ts";
-import QuestionRDBRepository from "../../repositories/question-rdb.repository.ts";
 import QuestionController from "../../controllers/question.controller.ts";
-import QuestionService from "../../services/question.service.ts";
 import mountErrorMessage from "../../utils/validation/mount-error-message.ts";
 import validateParam from "../../utils/validation/validate-param.ts";
-import CloudinaryImageUploader from "../../helpers/CloudinaryImageUploader.ts";
 
-function quizRoute(client: Client) {
-  const cloudinaryImageUploader = new CloudinaryImageUploader();
-  const quizRepository = new QuizRDBRepository(client);
-  const quizService = new QuizService(quizRepository);
-  const questionsRepository = new QuestionRDBRepository(client);
-  const questionService = new QuestionService(questionsRepository);
-  const questionController = new QuestionController(
-    questionService,
-    cloudinaryImageUploader,
-  );
-  const quizController = new QuizController(
-    quizService,
-    cloudinaryImageUploader,
-  );
-
+function quizRoute(
+  questionController: QuestionController,
+  quizController: QuizController,
+) {
   const quiz = new Hono();
 
   quiz.get("/", async (c) => {

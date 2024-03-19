@@ -1,16 +1,10 @@
-import { Client, Hono, HTTPException, validator } from "../../../deps/deps.ts";
-import OptionRDBRepository from "../../repositories/option-rdb.repository.ts";
-import OptionService from "../../services/option.service.ts";
+import { Hono, HTTPException, validator } from "../../../deps/deps.ts";
 import OptionController from "../../controllers/option.controller.ts";
 import mountErrorMessage from "../../utils/validation/mount-error-message.ts";
 import validateParam from "../../utils/validation/validate-param.ts";
 import optionSchema from "../../schemas/option.schema.ts";
 
-function questionRoute(client: Client) {
-  const optionRepository = new OptionRDBRepository(client);
-  const optionService = new OptionService(optionRepository);
-  const optionController = new OptionController(optionService);
-
+function questionRoute(optionController: OptionController) {
   const question = new Hono();
 
   question.post(

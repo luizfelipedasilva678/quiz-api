@@ -7,12 +7,45 @@ import {
   QuizRepositoryException,
   QuizRepositoryProtocol,
 } from "../types/quiz.types.ts";
+import { Nullable } from "../types/utility.types.ts";
 
 export default class QuizRDBRepository implements QuizRepositoryProtocol {
   private client: Client;
+  private static baseSelect = `
+    SELECT 
+      q.id as quiz_id, 
+      q.image_id as quiz_image_id, 
+      q.name as quiz_name, 
+      q.subject as quiz_subject, 
+      qu.id as question_id, 
+      qu.title as question_title, 
+      qu.image_id as question_image_id, 
+      o.id as option_id, 
+      o.description as option_descrition, 
+      o.is_correct as option_is_correct
+    FROM quiz q
+  `;
 
   constructor(client: Client) {
     this.client = client;
+  }
+
+  async getExpiradedQuizzes(): Promise<Nullable<QuizQueryResult>[] | null> {
+    try {
+      const result = await this.client.queryObject<Nullable<QuizQueryResult>>(
+        `${QuizRDBRepository.baseSelect} 
+          LEFT JOIN question qu ON q.id = qu.quiz_id
+          LEFT JOIN option o ON qu.id = o.question_id
+          WHERE q.expiration_date < NOW();
+        `,
+      );
+
+      if (!result.rowCount) return null;
+
+      return result.rows;
+    } catch (_e) {
+      throw new QuizRepositoryException("Error finding expiraded quizzes");
+    }
   }
 
   private tranformQueryResultToQuizFullObj(queryResult: QuizQueryResult[]) {
@@ -55,21 +88,10 @@ export default class QuizRDBRepository implements QuizRepositoryProtocol {
   async getById(id: number): Promise<QuizFull | null> {
     try {
       const result = await this.client.queryObject<QuizQueryResult>(
-        `SELECT 
-          q.id as quiz_id, 
-          q.image_id as quiz_image_id, 
-          q.name as quiz_name, 
-          q.subject as quiz_subject, 
-          qu.id as question_id, 
-          qu.title as question_title, 
-          qu.image_id as question_image_id, 
-          o.id as option_id, 
-          o.description as option_descrition, 
-          o.is_correct as option_is_correct
-        FROM quiz q
-        JOIN question qu ON q.id = qu.quiz_id
-        JOIN option o ON qu.id = o.question_id
-        WHERE q.id = $1;`,
+        `${QuizRDBRepository.baseSelect} 
+          JOIN question qu ON q.id = qu.quiz_id
+          JOIN option o ON qu.id = o.question_id
+          WHERE q.id = $1;`,
         [id],
       );
 
@@ -77,19 +99,23 @@ export default class QuizRDBRepository implements QuizRepositoryProtocol {
 
       return this.tranformQueryResultToQuizFullObj(result.rows);
     } catch (_e) {
-      console.log(_e);
       throw new QuizRepositoryException(`Error finding quiz ${id}`);
     }
   }
 
-  async delete(id: number) {
+  async delete(ids: string) {
     try {
-      const result = await this.client.queryObject<Quiz>(
-        "delete from quiz where id = $1 returning id",
-        [id],
+      const convertedIds = ids.split(",").map(Number);
+      const argsStr = convertedIds.map((_, i) => `$${i + 1}`).join(", ");
+
+      const result = await this.client.queryObject(
+        `delete from quiz where id in (${argsStr})`,
+        [...convertedIds],
       );
 
-      return result.rows.at(0)!;
+      if (!result.rowCount) return false;
+
+      return true;
     } catch (_e) {
       throw new QuizRepositoryException("Error deleting quiz");
     }
