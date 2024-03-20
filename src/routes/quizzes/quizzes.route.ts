@@ -15,6 +15,8 @@ function quizRoute(
   quiz.get("/", async (c) => {
     const quizzes = await quizController.getAll();
     return c.json(quizzes);
+  }).all(() => {
+    throw new HTTPException(405, { message: "Method not implemented" });
   });
 
   quiz.get(
@@ -37,7 +39,9 @@ function quizRoute(
 
       return c.json(quiz);
     },
-  );
+  ).all(() => {
+    throw new HTTPException(405, { message: "Method not implemented" });
+  });
 
   quiz.post(
     "/",
@@ -62,7 +66,9 @@ function quizRoute(
 
       return c.json(quiz);
     },
-  );
+  ).all(() => {
+    throw new HTTPException(405, { message: "Method not implemented" });
+  });
 
   quiz.post(
     "/:quizId/questions",
@@ -95,7 +101,9 @@ function quizRoute(
 
       return c.json(question);
     },
-  );
+  ).all(() => {
+    throw new HTTPException(405, { message: "Method not implemented" });
+  });
 
   return quiz;
 }

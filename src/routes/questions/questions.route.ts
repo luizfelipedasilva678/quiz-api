@@ -40,7 +40,9 @@ function questionRoute(optionController: OptionController) {
 
       return c.json(option);
     },
-  );
+  ).all(() => {
+    throw new HTTPException(405, { message: "Method not implemented" });
+  });
 
   return question;
 }
