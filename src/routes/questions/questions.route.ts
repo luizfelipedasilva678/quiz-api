@@ -3,6 +3,11 @@ import OptionController from "../../controllers/option.controller.ts";
 import mountErrorMessage from "../../utils/validation/mount-error-message.ts";
 import validateParam from "../../utils/validation/validate-param.ts";
 import optionSchema from "../../schemas/option.schema.ts";
+import {
+  HTTP_BAD_REQUEST,
+  HTTP_METHOD_NOT_ALLOWED,
+  HTTP_METHOD_NOT_ALLOWED_MESSAGE,
+} from "../../helpers/constants.ts";
 
 function questionRoute(optionController: OptionController) {
   const question = new Hono();
@@ -11,7 +16,9 @@ function questionRoute(optionController: OptionController) {
     "/:questionId/options",
     validator("param", (param) => {
       if (!validateParam(param.questionId)) {
-        throw new HTTPException(400, { message: "Invalid question id" });
+        throw new HTTPException(HTTP_BAD_REQUEST, {
+          message: "Invalid question id",
+        });
       }
 
       return {
@@ -23,7 +30,7 @@ function questionRoute(optionController: OptionController) {
 
       if (!parsed.success) {
         const message = mountErrorMessage(parsed.error.errors);
-        throw new HTTPException(400, { message });
+        throw new HTTPException(HTTP_BAD_REQUEST, { message });
       }
 
       return parsed.data;
@@ -41,7 +48,9 @@ function questionRoute(optionController: OptionController) {
       return c.json(option);
     },
   ).all(() => {
-    throw new HTTPException(405, { message: "Method not implemented" });
+    throw new HTTPException(HTTP_METHOD_NOT_ALLOWED, {
+      message: HTTP_METHOD_NOT_ALLOWED_MESSAGE,
+    });
   });
 
   return question;
