@@ -9,6 +9,15 @@ function questionRoute(optionController: OptionController) {
 
   question.post(
     "/:questionId/options",
+    validator("param", (param) => {
+      if (!validateParam(param.questionId)) {
+        throw new HTTPException(400, { message: "Invalid question id" });
+      }
+
+      return {
+        questionId: Number(param.questionId),
+      };
+    }),
     validator("json", (option) => {
       const parsed = optionSchema.safeParse(option);
 
@@ -18,15 +27,6 @@ function questionRoute(optionController: OptionController) {
       }
 
       return parsed.data;
-    }),
-    validator("param", (param) => {
-      if (!validateParam(param.questionId)) {
-        throw new HTTPException(400, { message: "Invalid questio id" });
-      }
-
-      return {
-        questionId: Number(param.questionId),
-      };
     }),
     async (c) => {
       const { questionId } = c.req.valid("param");

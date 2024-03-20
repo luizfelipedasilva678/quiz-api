@@ -31,6 +31,10 @@ function quizRoute(
 
       const quiz = await quizController.getById(quizId);
 
+      if (quiz === null) {
+        throw new HTTPException(404, { message: "Quiz not found" });
+      }
+
       return c.json(quiz);
     },
   );

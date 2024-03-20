@@ -10,3 +10,10 @@ export {
   HTTPException,
   validator,
 } from "https://deno.land/x/hono/mod.ts";
+export {
+  cache,
+  cors,
+  logger,
+  prettyJSON,
+  secureHeaders,
+} from "https://deno.land/x/hono/middleware.ts";
