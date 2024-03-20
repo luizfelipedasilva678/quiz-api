@@ -1,3 +1,5 @@
+import { Nullable } from "./utility.types.ts";
+
 export interface Quiz {
   id: number;
   name: string;
@@ -45,7 +47,8 @@ export type QuizFull = {
 
 export interface QuizRepositoryProtocol {
   create: (partialQuiz: PartialQuiz) => Promise<Quiz>;
-  delete: (id: number) => Promise<Quiz>;
+  delete: (id: string) => Promise<boolean>;
+  getExpiradedQuizzes: () => Promise<Nullable<QuizQueryResult>[] | null>;
   getById: (id: number) => Promise<QuizFull | null>;
   getAll: () => Promise<Quiz[]>;
 }

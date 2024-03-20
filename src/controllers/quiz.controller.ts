@@ -1,12 +1,12 @@
 import QuizService from "../services/quiz.service.ts";
-import { ImageUploader } from "../types/image-uploader.types.ts";
+import { ImageHandler } from "../types/image-handler.types.ts";
 import { CreateQuizControllerArg, PartialQuiz } from "../types/quiz.types.ts";
 
 export default class QuizController {
   private service: QuizService;
-  private imageUploader: ImageUploader;
+  private imageUploader: ImageHandler;
 
-  constructor(service: QuizService, imageUploader: ImageUploader) {
+  constructor(service: QuizService, imageUploader: ImageHandler) {
     this.service = service;
     this.imageUploader = imageUploader;
   }

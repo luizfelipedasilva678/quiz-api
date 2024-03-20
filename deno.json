@@ -1,7 +1,8 @@
 {
   "tasks": {
-    "dev": "ENV=development deno run --watch -A src/main.ts",
+    "dev": "ENV=development deno run --watch -A --unstable-cron src/server.ts",
     "check": "deno fmt --check && deno lint",
+    "start": "deno run -A --unstable-cron src/server.ts",
     "install-hooks": "deno run -A -r https://deno.land/x/githooks/githooks.ts"
   },
   "githooks": {

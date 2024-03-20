@@ -1,38 +1,39 @@
-import { Client, Hono, HTTPException, validator } from "../../../deps/deps.ts";
-import OptionRDBRepository from "../../repositories/option-rdb.repository.ts";
-import OptionService from "../../services/option.service.ts";
+import { Hono, HTTPException, validator } from "../../../deps/deps.ts";
 import OptionController from "../../controllers/option.controller.ts";
 import mountErrorMessage from "../../utils/validation/mount-error-message.ts";
 import validateParam from "../../utils/validation/validate-param.ts";
 import optionSchema from "../../schemas/option.schema.ts";
+import {
+  HTTP_BAD_REQUEST,
+  HTTP_METHOD_NOT_ALLOWED,
+  HTTP_METHOD_NOT_ALLOWED_MESSAGE,
+} from "../../helpers/constants.ts";
 
-function questionRoute(client: Client) {
-  const optionRepository = new OptionRDBRepository(client);
-  const optionService = new OptionService(optionRepository);
-  const optionController = new OptionController(optionService);
-
+function questionRoute(optionController: OptionController) {
   const question = new Hono();
 
   question.post(
     "/:questionId/options",
-    validator("json", (option) => {
-      const parsed = optionSchema.safeParse(option);
-
-      if (!parsed.success) {
-        const message = mountErrorMessage(parsed.error.errors);
-        throw new HTTPException(400, { message });
-      }
-
-      return parsed.data;
-    }),
     validator("param", (param) => {
       if (!validateParam(param.questionId)) {
-        throw new HTTPException(400, { message: "Invalid questio id" });
+        throw new HTTPException(HTTP_BAD_REQUEST, {
+          message: "Invalid question id",
+        });
       }
 
       return {
         questionId: Number(param.questionId),
       };
+    }),
+    validator("json", (option) => {
+      const parsed = optionSchema.safeParse(option);
+
+      if (!parsed.success) {
+        const message = mountErrorMessage(parsed.error.errors);
+        throw new HTTPException(HTTP_BAD_REQUEST, { message });
+      }
+
+      return parsed.data;
     }),
     async (c) => {
       const { questionId } = c.req.valid("param");
@@ -46,7 +47,11 @@ function questionRoute(client: Client) {
 
       return c.json(option);
     },
-  );
+  ).all(() => {
+    throw new HTTPException(HTTP_METHOD_NOT_ALLOWED, {
+      message: HTTP_METHOD_NOT_ALLOWED_MESSAGE,
+    });
+  });
 
   return question;
 }

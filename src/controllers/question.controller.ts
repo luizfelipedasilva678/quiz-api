@@ -1,5 +1,5 @@
 import QuestionService from "../services/question.service.ts";
-import { ImageUploader } from "../types/image-uploader.types.ts";
+import { ImageHandler } from "../types/image-handler.types.ts";
 import {
   CreateQuestionControllerArg,
   PartialQuestion,
@@ -7,9 +7,9 @@ import {
 
 export default class QuestionController {
   private service: QuestionService;
-  private imageUploader: ImageUploader;
+  private imageUploader: ImageHandler;
 
-  constructor(service: QuestionService, imageUploader: ImageUploader) {
+  constructor(service: QuestionService, imageUploader: ImageHandler) {
     this.service = service;
     this.imageUploader = imageUploader;
   }
