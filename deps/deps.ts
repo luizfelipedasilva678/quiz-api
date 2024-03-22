@@ -17,3 +17,4 @@ export {
   prettyJSON,
   secureHeaders,
 } from "https://deno.land/x/hono/middleware.ts";
+export * as base64 from "https://deno.land/std@0.207.0/encoding/base64.ts";
