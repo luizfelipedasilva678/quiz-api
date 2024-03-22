@@ -1,6 +1,6 @@
 import { Client, Logger } from "../../../deps/deps.ts";
-import QuizRepositoryFactory from "../../factories/quiz/quiz-repository.factory.ts";
-import ImageHandlerFactory from "../../factories/image-handler/image-handler.factory.ts";
+import QuizRepositoryFactory from "../../modules/quiz/factories/quiz-repository.factory.ts";
+import ImageHandlerFactory from "../../modules/common/image/factories/image-handler.factory.ts";
 
 function cronJobRemoveExpiredQuizzes(client: Client) {
   const quizRepository = QuizRepositoryFactory.makeRepository(client);

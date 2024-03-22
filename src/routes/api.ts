@@ -1,9 +1,9 @@
-import quizRoute from "./quizzes/quizzes.route.ts";
-import docRuote from "./doc/doc.route.ts";
-import questionRoute from "./questions/questions.route.ts";
-import QuestionControllerFactory from "../factories/question/question-controller.factory.ts";
-import OptionControllerFactory from "../factories/option/option-controller.factory.ts";
-import QuizControllerFactory from "../factories/quiz/quiz-controller.factory.ts";
+import quizRoute from "../modules/quiz/routes/quizzes.route.ts";
+import docRuote from "../modules/doc/doc.route.ts";
+import questionRoute from "../modules/questions/routes/questions.route.ts";
+import QuestionControllerFactory from "../modules/questions/factories/question-controller.factory.ts";
+import OptionControllerFactory from "../modules/option/factories/option-controller.factory.ts";
+import QuizControllerFactory from "../modules/quiz/factories/quiz-controller.factory.ts";
 import {
   Client,
   cors,
