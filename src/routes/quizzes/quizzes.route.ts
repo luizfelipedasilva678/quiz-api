@@ -21,11 +21,35 @@ function quizRoute(
   quiz.get("/", async (c) => {
     const quizzes = await quizController.getAll();
     return c.json(quizzes);
-  }).all(() => {
-    throw new HTTPException(HTTP_METHOD_NOT_ALLOWED, {
-      message: HTTP_METHOD_NOT_ALLOWED_MESSAGE,
+  })
+    .post(
+      "/",
+      validator("form", (value) => {
+        const parsed = quizSchema.safeParse(value);
+
+        if (!parsed.success) {
+          const message = mountErrorMessage(parsed.error.errors);
+          throw new HTTPException(HTTP_BAD_REQUEST, { message });
+        }
+
+        return parsed.data;
+      }),
+      async (c) => {
+        const body = c.req.valid("form");
+
+        const quiz = await quizController.create({
+          name: body.name,
+          subject: body.subject,
+          image: body.image,
+        });
+
+        return c.json(quiz);
+      },
+    ).all(() => {
+      throw new HTTPException(HTTP_METHOD_NOT_ALLOWED, {
+        message: HTTP_METHOD_NOT_ALLOWED_MESSAGE,
+      });
     });
-  });
 
   quiz.get(
     "/:quizId",
@@ -44,35 +68,6 @@ function quizRoute(
       if (quiz === null) {
         throw new HTTPException(HTTP_NOT_FOUND, { message: "Quiz not found" });
       }
-
-      return c.json(quiz);
-    },
-  ).all(() => {
-    throw new HTTPException(HTTP_METHOD_NOT_ALLOWED, {
-      message: HTTP_METHOD_NOT_ALLOWED_MESSAGE,
-    });
-  });
-
-  quiz.post(
-    "/",
-    validator("form", (value) => {
-      const parsed = quizSchema.safeParse(value);
-
-      if (!parsed.success) {
-        const message = mountErrorMessage(parsed.error.errors);
-        throw new HTTPException(HTTP_BAD_REQUEST, { message });
-      }
-
-      return parsed.data;
-    }),
-    async (c) => {
-      const body = c.req.valid("form");
-
-      const quiz = await quizController.create({
-        name: body.name,
-        subject: body.subject,
-        image: body.image,
-      });
 
       return c.json(quiz);
     },
