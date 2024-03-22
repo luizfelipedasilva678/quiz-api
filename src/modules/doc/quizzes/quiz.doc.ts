@@ -11,9 +11,9 @@ const createQuiz = createRoute({
             .object({
               name: z.string(),
               subject: z.string(),
-              image: z.instanceof(File).nullable(),
+              image: z.instanceof(File).nullable().optional(),
             })
-            .openapi("FormData for creating a quiz"),
+            .openapi("Quizzes - FormData for creating a quiz"),
         },
       },
     },
@@ -29,30 +29,30 @@ const createQuiz = createRoute({
               subject: z.string(),
               image_id: z.string().nullable(),
             })
-            .openapi("Response after creating a quiz"),
+            .openapi("Quizzes - Response after creating a quiz"),
         },
       },
-      description: "Created quiz",
+      description: "Quizzes - Created quiz",
     },
     400: {
       content: {
         "application/json": {
           schema: z.object({
             message: z.string(),
-          }).openapi("Create quiz Bad request (missing fields)"),
+          }).openapi("Quizzes - Create quiz Bad request (missing fields)"),
         },
       },
-      description: "Create quiz Bad request (missing fields)",
+      description: "Quizzes - Create quiz Bad request (missing fields)",
     },
     500: {
       content: {
         "application/json": {
           schema: z.object({
             message: z.string(),
-          }).openapi("Server error"),
+          }).openapi("Quizzes - Server error"),
         },
       },
-      description: "Server error",
+      description: "Quizzes - Server error",
     },
   },
 });
@@ -69,20 +69,20 @@ const getAllQuizzes = createRoute({
             name: z.string(),
             subject: z.string(),
             image_id: z.string().nullable(),
-          })).openapi("All quizzes"),
+          })).openapi("Quizzes - All quizzes"),
         },
       },
-      description: "All quizzes",
+      description: "Quizzes - All quizzes",
     },
     500: {
       content: {
         "application/json": {
           schema: z.object({
             message: z.string(),
-          }).openapi("Server error getting all quizzes"),
+          }).openapi("Quizzes - Server error getting all quizzes"),
         },
       },
-      description: "Server error getting all quizzes",
+      description: "Quizzes - Server error getting all quizzes",
     },
   },
 });
@@ -107,9 +107,9 @@ const createQuizQuestion = createRoute({
           schema: z
             .object({
               title: z.string(),
-              image: z.instanceof(File).nullable(),
+              image: z.instanceof(File).nullable().optional(),
             })
-            .openapi("FormData for creating a question"),
+            .openapi("Quizzes - FormData for creating a question"),
         },
       },
     },
@@ -120,20 +120,20 @@ const createQuizQuestion = createRoute({
         "application/json": {
           schema: z.object({
             message: z.string(),
-          }).openapi("Get quiz questions Bad request (invalid id)"),
+          }).openapi("Quizzes - Get quiz questions Bad request (invalid id)"),
         },
       },
-      description: "Get quiz question Bad request (invalid id)",
+      description: "Quizzes - Get quiz question Bad request (invalid id)",
     },
     500: {
       content: {
         "application/json": {
           schema: z.object({
             message: z.string(),
-          }).openapi("Server error creating question"),
+          }).openapi("Quizzes - Server error creating question"),
         },
       },
-      description: "Server error creating question",
+      description: "Quizzes - Server error creating question",
     },
     200: {
       content: {
@@ -143,10 +143,10 @@ const createQuizQuestion = createRoute({
             quiz_id: z.number(),
             title: z.string(),
             image_id: z.string().nullable(),
-          }).openapi("Created question"),
+          }).openapi("Quizzes - Created question"),
         },
       },
-      description: "Created question",
+      description: "Quizzes - Created question",
     },
   },
 });
@@ -172,30 +172,30 @@ const getQuiz = createRoute({
         "application/json": {
           schema: z.object({
             message: z.string(),
-          }).openapi("Get quiz Bad request (invalid id)"),
+          }).openapi("Quizzes - Get quiz Bad request (invalid id)"),
         },
       },
-      description: "Get quiz Bad request (invalid id)",
+      description: "Quizzes - Get quiz Bad request (invalid id)",
     },
     404: {
       content: {
         "application/json": {
           schema: z.object({
             message: z.string(),
-          }).openapi("Quiz not found"),
+          }).openapi("Quizzes - Quiz not found"),
         },
       },
-      description: "Quiz not found",
+      description: "Quizzes - Quiz not found",
     },
     500: {
       content: {
         "application/json": {
           schema: z.object({
             message: z.string(),
-          }).openapi("Server error finding quiz"),
+          }).openapi("Quizzes - Server error finding quiz"),
         },
       },
-      description: "Server error finding quiz",
+      description: "Quizzes - Server error finding quiz",
     },
     200: {
       content: {
@@ -215,10 +215,10 @@ const getQuiz = createRoute({
                 is_correct: z.boolean(),
               })),
             })),
-          })).openapi("Found quizzes"),
+          })).openapi("Quizzes - Found quizzes"),
         },
       },
-      description: "Found quizzes",
+      description: "Quizzes - Found quizzes",
     },
   },
 });

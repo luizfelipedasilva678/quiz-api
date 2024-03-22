@@ -2,43 +2,47 @@ import { Client, Logger } from "../../../deps/deps.ts";
 import QuizRepositoryFactory from "../../modules/quiz/factories/quiz-repository.factory.ts";
 import ImageHandlerFactory from "../../modules/common/image/factories/image-handler.factory.ts";
 
-function cronJobRemoveExpiredQuizzes(client: Client) {
-  const quizRepository = QuizRepositoryFactory.makeRepository(client);
-  const imageHandler = ImageHandlerFactory.makeImageHandler();
-  const logger = new Logger();
+class CronJobRemoveExpiredQuizzes {
+  constructor(private client: Client) {}
 
-  Deno.cron("Remove expired quizzes", "0 0 2 * *", async () => {
-    const expiredQuizzes = await quizRepository.getExpiradedQuizzes();
-    const requests = [];
+  start() {
+    const quizRepository = QuizRepositoryFactory.makeRepository(this.client);
+    const imageHandler = ImageHandlerFactory.makeImageHandler();
+    const logger = new Logger();
 
-    if (!expiredQuizzes) return;
+    Deno.cron("Remove expired quizzes", "0 0 2 * *", async () => {
+      const expiredQuizzes = await quizRepository.getExpiradedQuizzes();
+      const requests = [];
 
-    const expiredQuizzesIds = [
-      ...new Set(expiredQuizzes.map((quiz) => quiz.quiz_id)),
-    ].filter(Boolean);
-    const expiredsImagesId = expiredQuizzes.map((
-      quiz,
-    ) => [quiz.quiz_image_id, quiz.question_image_id]).flat(Infinity).filter(
-      Boolean,
-    );
+      if (!expiredQuizzes) return;
 
-    if (expiredQuizzesIds) {
-      requests.push(quizRepository.delete(expiredQuizzesIds.join(",")));
-    }
+      const expiredQuizzesIds = [
+        ...new Set(expiredQuizzes.map((quiz) => quiz.quiz_id)),
+      ].filter(Boolean);
+      const expiredsImagesId = expiredQuizzes.map((
+        quiz,
+      ) => [quiz.quiz_image_id, quiz.question_image_id]).flat(Infinity).filter(
+        Boolean,
+      );
 
-    if (expiredsImagesId) {
-      requests.push(imageHandler.deleteImage(expiredsImagesId.join(",")));
-    }
+      if (expiredQuizzesIds) {
+        requests.push(quizRepository.delete(expiredQuizzesIds.join(",")));
+      }
 
-    logger.info(
-      "Removing expired quizzes job status:",
-      (await Promise.allSettled(requests)).map((p) => p.status).find((s) =>
-          s === "rejected"
-        )
-        ? "Something went wrong"
-        : "Worked fine",
-    );
-  });
+      if (expiredsImagesId) {
+        requests.push(imageHandler.deleteImage(expiredsImagesId.join(",")));
+      }
+
+      logger.info(
+        "Removing expired quizzes job status:",
+        (await Promise.allSettled(requests)).map((p) => p.status).find((s) =>
+            s === "rejected"
+          )
+          ? "Something went wrong"
+          : "Worked fine",
+      );
+    });
+  }
 }
 
-export default cronJobRemoveExpiredQuizzes;
+export default CronJobRemoveExpiredQuizzes;

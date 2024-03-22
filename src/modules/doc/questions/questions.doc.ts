@@ -22,7 +22,7 @@ const createQuestionOption = createRoute({
               description: z.string(),
               is_correct: z.boolean(),
             })
-            .openapi("Body for creating a option"),
+            .openapi("Questions - Body for creating a option"),
         },
       },
     },
@@ -33,20 +33,20 @@ const createQuestionOption = createRoute({
         "application/json": {
           schema: z.object({
             message: z.string(),
-          }).openapi("Invalid question Id"),
+          }).openapi("Questions - Invalid question Id"),
         },
       },
-      description: "Invalid question ID",
+      description: "Questions - Invalid question ID",
     },
     500: {
       content: {
         "application/json": {
           schema: z.object({
             message: z.string(),
-          }).openapi("Error creating option"),
+          }).openapi("Questions - Error creating option"),
         },
       },
-      description: "Error creating option",
+      description: "Questions - Error creating option",
     },
     200: {
       content: {
@@ -56,10 +56,10 @@ const createQuestionOption = createRoute({
             question_id: z.number(),
             description: z.string(),
             is_correct: z.boolean(),
-          }).openapi("Created question"),
+          }).openapi("Questions - Created question"),
         },
       },
-      description: "Created question",
+      description: "Questions - Created question",
     },
   },
 });
