@@ -12,6 +12,10 @@ import {
   prettyJSON,
   secureHeaders,
 } from "../../../deps/deps.ts";
+import {
+  HTTP_METHOD_NOT_ALLOWED,
+  HTTP_METHOD_NOT_ALLOWED_MESSAGE,
+} from "../common/helpers/constants.ts";
 
 class App implements Router<Hono> {
   constructor(private client: Client) {}
@@ -32,18 +36,32 @@ class App implements Router<Hono> {
       quizController,
     );
 
-    app.use("*", secureHeaders());
-    app.use("*", logger());
-    app.use("*", prettyJSON());
-    app.use(
-      "*",
-      cors(),
-    );
+    app.use(secureHeaders());
+    app.use(logger());
+    app.use(prettyJSON());
+    app.use(cors());
+
     app.route("/v1", appV1.getRouter());
+    app.get("/v1", (c) => {
+      return c.json({
+        quizzes: `${baseUrl}/v1/quizzes`,
+        questions: `${baseUrl}/v1/questions`,
+        doc: `${baseUrl}/v1/doc`,
+        swaggerUi: `${baseUrl}/v1/doc/ui`,
+      });
+    }).all(() => {
+      throw new HTTPException(HTTP_METHOD_NOT_ALLOWED, {
+        message: HTTP_METHOD_NOT_ALLOWED_MESSAGE,
+      });
+    });
 
     app.get("/", (c) => {
       return c.json({
         v1: `${baseUrl}/v1`,
+      });
+    }).all(() => {
+      throw new HTTPException(HTTP_METHOD_NOT_ALLOWED, {
+        message: HTTP_METHOD_NOT_ALLOWED_MESSAGE,
       });
     });
 

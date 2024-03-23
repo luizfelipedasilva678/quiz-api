@@ -16,7 +16,6 @@ class AppV1Router implements Router<Hono> {
 
   getRouter() {
     const app = new Hono();
-    const baseUrl = Deno.env.get("BASE_URL");
     const docRuoter = new DocRouter();
     const questionRouter = new QuestionRouter(this.optionController);
     const quizRouter = new QuizRouter(
@@ -27,15 +26,6 @@ class AppV1Router implements Router<Hono> {
     app.route("/doc", docRuoter.getRouter() as unknown as Hono);
     app.route("/quizzes", quizRouter.getRouter());
     app.route("/questions", questionRouter.getRouter());
-
-    app.get("/", (c) => {
-      return c.json({
-        quizzes: `${baseUrl}/v1/quizzes`,
-        questions: `${baseUrl}/v1/questions`,
-        doc: `${baseUrl}/v1/doc`,
-        swaggerUi: `${baseUrl}/v1/doc/ui`,
-      });
-    });
 
     return app;
   }
