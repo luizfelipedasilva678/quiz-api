@@ -1,8 +1,8 @@
 import getClient from "../../common/helpers/tests/getClient.ts";
 import QuizRepositoryFactory from "../factories/quiz-repository.factory.ts";
 import setEnvs from "../../../config/env/setEnvs.ts";
-import { assert } from "https://deno.land/std@0.220.0/assert/mod.ts";
-import { Quiz } from "../types/quiz.types.ts";
+import { Quiz, QuizRepositoryException } from "../types/quiz.types.ts";
+import { assert, assertRejects } from "../../../../deps/deps.ts";
 
 Deno.test("Quiz repository", async (t) => {
   await setEnvs();
@@ -20,6 +20,18 @@ Deno.test("Quiz repository", async (t) => {
     assert(createdQuiz.image_id === null || createdQuiz.image_id);
     assert(createdQuiz.subject);
     assert(createdQuiz.name);
+  });
+
+  await t.step("It should throw and exception", () => {
+    assertRejects(
+      async () => {
+        await quizRepository.create({
+          name: "Quiz 1",
+        });
+      },
+      QuizRepositoryException,
+      "Error creating quiz",
+    );
   });
 
   await t.step("It should find a quiz correctly", async () => {
