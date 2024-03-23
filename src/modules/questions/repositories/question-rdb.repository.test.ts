@@ -11,8 +11,8 @@ Deno.test("Question repository", async (t) => {
   const quizRepository = QuizRepositoryFactory.makeRepository(client);
   const questionRepository = QuestionRepositoryFactory.makeRepository(client);
   const createdQuiz: Quiz = await quizRepository.create({
-    name: "Quiz 1",
-    subject: "Subject 1",
+    name: "Quiz",
+    subject: "Subject",
   });
 
   await t.step("It should insert a question correctly", async () => {
