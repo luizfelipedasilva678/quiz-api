@@ -23,5 +23,5 @@ this repository to do this, after that you just need to run `deno task dev`.
 
 ## Documentation
 
-You can find the documention the the follow endpoint: `/v1/doc` (OpenApi) or
+You can find the documention in the follow endpoints: `/v1/doc` (OpenApi) or
 `/v1/doc/ui` (SwaggerUI)
