@@ -25,6 +25,7 @@ Deno.test("Quiz repository", async (t) => {
   await t.step("It should throw and exception", () => {
     assertRejects(
       async () => {
+        // @ts-expect-error - Testing if the exception is thrown
         await quizRepository.create({
           name: "Quiz 1",
         });
