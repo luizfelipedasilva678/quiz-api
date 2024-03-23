@@ -7,11 +7,11 @@ import { Logger } from "../deps/deps.ts";
 async function start() {
   const logger = new Logger();
 
-  if (Deno.env.get("ENV") === "development") {
-    await setEnvs();
-  }
-
   try {
+    if (Deno.env.get("ENV") === "development") {
+      await setEnvs();
+    }
+
     const client = Database.getClient();
     await client.connect();
 

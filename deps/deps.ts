@@ -18,3 +18,8 @@ export {
   secureHeaders,
 } from "https://deno.land/x/hono/middleware.ts";
 export * as base64 from "https://deno.land/std@0.207.0/encoding/base64.ts";
+export {
+  assert,
+  assertRejects,
+  assertThrows,
+} from "https://deno.land/std@0.220.0/assert/mod.ts";

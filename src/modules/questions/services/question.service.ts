@@ -4,7 +4,7 @@ import {
   QuestionServiceException,
 } from "../types/question.types.ts";
 
-export default class QuizService {
+export default class QuestionService {
   private repository: QuestionRepositoryProtocol;
 
   constructor(repository: QuestionRepositoryProtocol) {

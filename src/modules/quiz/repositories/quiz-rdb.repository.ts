@@ -24,6 +24,8 @@ export default class QuizRDBRepository implements QuizRepositoryProtocol {
       o.description as option_descrition, 
       o.is_correct as option_is_correct
     FROM quiz q
+    LEFT JOIN question qu ON q.id = qu.quiz_id
+    LEFT JOIN option o ON qu.id = o.question_id
   `;
 
   constructor(client: Client) {
@@ -34,8 +36,6 @@ export default class QuizRDBRepository implements QuizRepositoryProtocol {
     try {
       const result = await this.client.queryObject<Nullable<QuizQueryResult>>(
         `${QuizRDBRepository.baseSelect} 
-          LEFT JOIN question qu ON q.id = qu.quiz_id
-          LEFT JOIN option o ON qu.id = o.question_id
           WHERE q.expiration_date < NOW();
         `,
       );
@@ -58,6 +58,8 @@ export default class QuizRDBRepository implements QuizRepositoryProtocol {
     };
 
     for (const row of queryResult) {
+      if (!row.question_id) continue;
+
       const question = quiz.questions.find((q) => q.id === row.question_id);
 
       if (!question) {
@@ -89,8 +91,6 @@ export default class QuizRDBRepository implements QuizRepositoryProtocol {
     try {
       const result = await this.client.queryObject<QuizQueryResult>(
         `${QuizRDBRepository.baseSelect} 
-          JOIN question qu ON q.id = qu.quiz_id
-          JOIN option o ON qu.id = o.question_id
           WHERE q.id = $1;`,
         [id],
       );
