@@ -10,7 +10,7 @@ class CronJobRemoveExpiredQuizzes {
     const imageHandler = ImageHandlerFactory.makeImageHandler();
     const logger = new Logger();
 
-    Deno.cron("Remove expired quizzes", "0 0 * * *", async () => {
+    Deno.cron("Remove expired quizzes", "30 2 * * *", async () => {
       const expiredQuizzes = await quizRepository.getExpiradedQuizzes();
       const requests = [];
 
