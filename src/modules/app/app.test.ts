@@ -1,6 +1,6 @@
 import App from "./app.ts";
 import getClient from "../common/helpers/tests/getClient.ts";
-import setEnvs from "../../config/env/setEnvs.ts";
+import setEnvs from "../../config/env/set-envs.ts";
 import { assert } from "../../../deps/deps.ts";
 import { Quiz } from "../quiz/types/quiz.types.ts";
 import { Question } from "../questions/types/question.types.ts";

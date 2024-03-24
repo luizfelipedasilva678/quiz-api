@@ -4,6 +4,10 @@ import QuizControllerFactory from "../quiz/factories/quiz-controller.factory.ts"
 import AppV1 from "./v1/app.v1.ts";
 import { Router } from "../common/types/router.types.ts";
 import {
+  HTTP_METHOD_NOT_ALLOWED,
+  HTTP_METHOD_NOT_ALLOWED_MESSAGE,
+} from "../common/helpers/constants.ts";
+import {
   Client,
   cors,
   Hono,
@@ -12,10 +16,7 @@ import {
   prettyJSON,
   secureHeaders,
 } from "../../../deps/deps.ts";
-import {
-  HTTP_METHOD_NOT_ALLOWED,
-  HTTP_METHOD_NOT_ALLOWED_MESSAGE,
-} from "../common/helpers/constants.ts";
+import rateLimiter from "./middlewares/rate-limiter.ts";
 
 class App implements Router<Hono> {
   constructor(private client: Client) {}
@@ -40,6 +41,7 @@ class App implements Router<Hono> {
     app.use(logger());
     app.use(prettyJSON());
     app.use(cors());
+    app.use(rateLimiter());
 
     app.route("/v1", appV1.getRouter());
     app.get("/v1", (c) => {

@@ -6,8 +6,11 @@ export { type ZodIssue } from "https://deno.land/x/zod@v3.22.4/ZodError.ts";
 export { Buffer } from "https://deno.land/std/io/buffer.ts";
 export { Logger };
 export {
+  type Context,
   Hono,
   HTTPException,
+  type MiddlewareHandler,
+  type Next,
   validator,
 } from "https://deno.land/x/hono/mod.ts";
 export {
@@ -16,7 +19,7 @@ export {
   logger,
   prettyJSON,
   secureHeaders,
-} from "https://deno.land/x/hono/middleware.ts";
+} from "https://deno.land/x/hono@v4.1.1/middleware.ts";
 export * as base64 from "https://deno.land/std@0.207.0/encoding/base64.ts";
 export {
   assert,
