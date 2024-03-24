@@ -4,6 +4,10 @@ import QuizControllerFactory from "../quiz/factories/quiz-controller.factory.ts"
 import AppV1 from "./v1/app.v1.ts";
 import { Router } from "../common/types/router.types.ts";
 import {
+  HTTP_METHOD_NOT_ALLOWED,
+  HTTP_METHOD_NOT_ALLOWED_MESSAGE,
+} from "../common/helpers/constants.ts";
+import {
   Client,
   cors,
   Hono,
@@ -12,10 +16,14 @@ import {
   prettyJSON,
   secureHeaders,
 } from "../../../deps/deps.ts";
-import {
-  HTTP_METHOD_NOT_ALLOWED,
-  HTTP_METHOD_NOT_ALLOWED_MESSAGE,
-} from "../common/helpers/constants.ts";
+
+const rateLimit = {
+  windowMs: 60 * 1000,
+  max: 10,
+  message: "Too many requests, please try again after 1 minute.",
+};
+
+const requestTimestamps: Map<string, number[]> = new Map();
 
 class App implements Router<Hono> {
   constructor(private client: Client) {}
@@ -36,6 +44,24 @@ class App implements Router<Hono> {
       quizController,
     );
 
+    app.use(async (c, next) => {
+      const ip = c.env!.clientIp as string;
+      const now = Date.now();
+      const timestamps = requestTimestamps.get(ip) || [];
+
+      while (timestamps.length && timestamps[0] <= now - rateLimit.windowMs) {
+        timestamps.shift();
+      }
+
+      timestamps.push(now);
+      requestTimestamps.set(ip, timestamps);
+
+      if (timestamps.length > rateLimit.max) {
+        throw new HTTPException(429, { message: rateLimit.message });
+      }
+
+      await next();
+    });
     app.use(secureHeaders());
     app.use(logger());
     app.use(prettyJSON());

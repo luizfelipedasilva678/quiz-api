@@ -1,6 +1,6 @@
 import getClient from "../../common/helpers/tests/getClient.ts";
 import QuizRepositoryFactory from "../factories/quiz-repository.factory.ts";
-import setEnvs from "../../../config/env/setEnvs.ts";
+import setEnvs from "../../../config/env/set-envs.ts";
 import { Quiz } from "../types/quiz.types.ts";
 import { assert, assertRejects } from "../../../../deps/deps.ts";
 import QuizService from "./quiz.service.ts";

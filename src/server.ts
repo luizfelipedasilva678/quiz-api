@@ -1,4 +1,4 @@
-import setEnvs from "./config/env/setEnvs.ts";
+import setEnvs from "./config/env/set-envs.ts";
 import Database from "./config/db/database.ts";
 import App from "./modules/app/app.ts";
 import CronJobRemoveExpiredQuizzes from "./jobs/cron/remove-expired-quizzes.ts";
@@ -18,7 +18,11 @@ async function start() {
     const app = new App(client);
     const cronJobRemoveExpiredQuizzes = new CronJobRemoveExpiredQuizzes(client);
 
-    Deno.serve(app.getRouter().fetch);
+    Deno.serve((req, info) => {
+      const { remoteAddr: { hostname } } = info;
+      const env = { clientIp: hostname };
+      return app.getRouter().fetch(req, env);
+    });
     cronJobRemoveExpiredQuizzes.start();
   } catch (e) {
     logger.error(e.message);

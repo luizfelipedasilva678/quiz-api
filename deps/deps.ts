@@ -16,7 +16,7 @@ export {
   logger,
   prettyJSON,
   secureHeaders,
-} from "https://deno.land/x/hono/middleware.ts";
+} from "https://deno.land/x/hono@v4.1.1/middleware.ts";
 export * as base64 from "https://deno.land/std@0.207.0/encoding/base64.ts";
 export {
   assert,
