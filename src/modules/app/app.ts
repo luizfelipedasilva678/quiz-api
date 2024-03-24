@@ -37,11 +37,11 @@ class App implements Router<Hono> {
       quizController,
     );
 
-    app.use(rateLimiter());
     app.use(secureHeaders());
     app.use(logger());
     app.use(prettyJSON());
     app.use(cors());
+    app.use(rateLimiter());
 
     app.route("/v1", appV1.getRouter());
     app.get("/v1", (c) => {
