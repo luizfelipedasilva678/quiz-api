@@ -6,8 +6,11 @@ export { type ZodIssue } from "https://deno.land/x/zod@v3.22.4/ZodError.ts";
 export { Buffer } from "https://deno.land/std/io/buffer.ts";
 export { Logger };
 export {
+  type Context,
   Hono,
   HTTPException,
+  type MiddlewareHandler,
+  type Next,
   validator,
 } from "https://deno.land/x/hono/mod.ts";
 export {

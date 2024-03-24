@@ -16,14 +16,7 @@ import {
   prettyJSON,
   secureHeaders,
 } from "../../../deps/deps.ts";
-
-const rateLimit = {
-  windowMs: 60 * 1000,
-  max: 10,
-  message: "Too many requests, please try again after 1 minute.",
-};
-
-const requestTimestamps: Map<string, number[]> = new Map();
+import rateLimiter from "./middlewares/rate-limiter.ts";
 
 class App implements Router<Hono> {
   constructor(private client: Client) {}
@@ -44,24 +37,7 @@ class App implements Router<Hono> {
       quizController,
     );
 
-    app.use(async (c, next) => {
-      const ip = c.env!.clientIp as string;
-      const now = Date.now();
-      const timestamps = requestTimestamps.get(ip) || [];
-
-      while (timestamps.length && timestamps[0] <= now - rateLimit.windowMs) {
-        timestamps.shift();
-      }
-
-      timestamps.push(now);
-      requestTimestamps.set(ip, timestamps);
-
-      if (timestamps.length > rateLimit.max) {
-        throw new HTTPException(429, { message: rateLimit.message });
-      }
-
-      await next();
-    });
+    app.use(rateLimiter());
     app.use(secureHeaders());
     app.use(logger());
     app.use(prettyJSON());
