@@ -7,7 +7,8 @@ This is an api to create quizzes 🧠
 Firstly you will need a Postgres database you can use the docker-compose.yaml
 (to use this file you will need to configure the secrets you can find more
 information [here](https://docs.docker.com/compose/use-secrets/)) in this
-repository to do this, after that you just need to run `deno task dev`.
+repository to do this, after that you just need to run the script.sql (available in /docs/script.sql) 
+and `deno task dev`.
 
 ## Environment variables
 
