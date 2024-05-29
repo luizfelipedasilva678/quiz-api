@@ -31,4 +31,4 @@ You can find the documention in the follow endpoints: `/v1/doc` (OpenApi) or
 
 ## To Do
 
-- [] Improve the API so that tests are database independent.
+- [] Improve testing.
