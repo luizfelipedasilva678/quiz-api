@@ -28,3 +28,7 @@ in /docs/script.sql) and `deno task dev`.
 
 You can find the documention in the follow endpoints: `/v1/doc` (OpenApi) or
 `/v1/doc/ui` (SwaggerUI)
+
+## To DO
+
+- [] Improve the API so that tests are database independent.
